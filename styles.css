@@ -1,0 +1,700 @@
+:root {
+    --navy: #0a192f;
+    --blue: #1f4068;
+    --purple: #6c5b7b;
+    --violet: #c06c84;
+    --white: #f8f9fa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--navy);
+}
+
+/* Header Styles */
+.header {
+    background: var(--navy);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+    color: var(--white);
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.logo:hover {
+    color: var(--violet);
+}
+
+.nav ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav li {
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.nav li:hover,
+.nav li.active {
+    background: var(--purple);
+    color: var(--white);
+}
+
+/* Section Common Styles */
+.section {
+    padding: 3rem 2rem;
+    min-height: 70vh;
+}
+
+/* Home Section */
+.home-section {
+    text-align: center;
+    background: linear-gradient(45deg, var(--blue), var(--purple));
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-section h2 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.cta-button {
+    background: var(--violet);
+    color: var(--white);
+    padding: 1rem 2rem;
+    margin: 1rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cta-button:hover {
+    transform: scale(1.05);
+}
+
+/* Events Section */
+.events-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.events-controls input,
+.events-controls select {
+    padding: 0.8rem;
+    border: 2px solid var(--blue);
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 200px;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.event-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+}
+
+.event-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.event-details {
+    padding: 1.5rem;
+}
+
+.event-details h3 {
+    margin-bottom: 0.5rem;
+    color: var(--navy);
+}
+
+.book-button {
+    background: var(--purple);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    transition: background 0.3s ease;
+}
+
+.book-button:hover {
+    background: var(--violet);
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    position: relative;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--navy);
+}
+
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0.5rem;
+    margin: 2rem 0;
+}
+
+.seat {
+    background: var(--blue);
+    color: white;
+    padding: 0.5rem;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.seat.selected {
+    background: var(--violet);
+    transform: scale(1.1);
+}
+
+.total-section {
+    text-align: right;
+    margin-top: 2rem;
+    font-size: 1.1rem;
+}
+
+.proceed-button {
+    background: var(--purple);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+/* Category Styles */
+.categories-section h2 {
+    text-align: center;
+    color: var(--purple);
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.category-table {
+    width: 100%;
+    max-width: 600px;
+    margin: 2rem auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.category-table tr {
+    border-bottom: 1px solid rgba(108, 91, 123, 0.2);
+}
+
+.category-table td {
+    padding: 1.2rem;
+    font-size: 1.1rem;
+}
+
+.category-name {
+    color: var(--purple);
+    font-weight: 500;
+}
+
+.view-button {
+    background: var(--violet);
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view-button:hover {
+    background: var(--purple);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* About Section */
+.about-hero {
+    background: linear-gradient(45deg, var(--blue), var(--purple));
+    color: white;
+    text-align: center;
+    padding: 4rem 1rem;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+}
+
+.about-hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.mission-statement {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin: 2rem 0;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.value-card {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+.value-card:hover {
+    transform: translateY(-5px);
+}
+
+.value-card i {
+    font-size: 2.5rem;
+    color: var(--violet);
+    margin-bottom: 1rem;
+}
+
+.story-section {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    margin: 3rem 0;
+}
+
+.milestones {
+    display: flex;
+    justify-content: space-around;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.milestone {
+    text-align: center;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    min-width: 150px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.milestone .number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--purple);
+}
+
+.team-section {
+    margin: 4rem 0;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.member-card {
+    text-align: center;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.member-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.cta-about {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 3rem;
+    background: linear-gradient(45deg, var(--purple), var(--violet));
+    color: white;
+    border-radius: 10px;
+}
+
+/* Footer Styles */
+.footer {
+    background: var(--navy);
+    color: var(--white);
+    padding: 2rem 1rem;
+    text-align: center;
+    margin-top: auto;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.social-icon {
+    color: var(--white);
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+    color: var(--violet);
+}
+
+.copyright {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .about-hero h2 {
+        font-size: 2rem;
+    }
+    
+    .milestone {
+        width: 100%;
+    }
+
+    .nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .events-controls {
+        flex-direction: column;
+    }
+
+    .events-controls input,
+    .events-controls select {
+        width: 100%;
+    }
+
+    .social-links {
+        gap: 1rem;
+    }
+    
+    .copyright {
+        font-size: 0.8rem;
+    }
+
+    .category-table {
+        width: 95%;
+    }
+    
+    .category-table td {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    
+    .view-button {
+        padding: 0.5rem 1rem;
+    }
+}
+
+.payment-modal label {
+    display: block;
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.payment-modal input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.payment-modal img {
+    width: 200px;
+    display: block;
+    margin: 10px auto;
+}
+
+.proceed-btn {
+    background: var(--blue);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.proceed-btn:hover {
+    background: var(--violet);
+    transform: scale(1.05);
+}
+
+/* User Section in Header */
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.auth-button {
+    background: var(--violet);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-button.logout {
+    background: var(--purple);
+}
+
+.auth-button:hover {
+    transform: scale(1.05);
+}
+
+/* Authentication Modal */
+.auth-modal {
+    text-align: center;
+}
+
+.auth-modal input {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border: 2px solid var(--blue);
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.auth-action {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    background: var(--purple);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.auth-action:hover {
+    background: var(--violet);
+}
+
+.auth-modal p {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.auth-modal a {
+    color: var(--blue);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Seat Legend */
+.seat-legend {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.seat-legend .seat {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+/* Seat Grid */
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+/* Seat Categories */
+.seat {
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Seat Categories */
+.vip { background: rgb(149, 0, 255); }
+.regular { background: dodgerblue; }
+.selected { background: black !important; color: white; }
+
+.vip { background: rgb(149, 0, 255); }
+.regular { background: dodgerblue; }
+.selected { background: black !important; color: white; }
+
+/* Wishlist Page */
+.wishlist-section {
+    padding: 2rem;
+    text-align: center;
+}
+
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Wishlist Button */
+.wishlist-button {
+    background: var(--purple);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    transition: background 0.3s ease;
+}
+
+.wishlist-button:hover {
+    background: var(--violet);
+}
+
+.wishlist-button.remove {
+    background: crimson;
+}
+
+.wishlist-button.remove:hover {
+    background: darkred;
+}
+
+/* Ticket Modal Styles */
+.ticket-modal {
+    text-align: center;
+    padding: 2rem;
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.ticket-modal h2 {
+    color: #6c5b7b;
+    margin-bottom: 1rem;
+}
+
+.qr-code-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.download-button {
+    background: #1f4068;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.download-button:hover {
+    background: #6c5b7b;
+}

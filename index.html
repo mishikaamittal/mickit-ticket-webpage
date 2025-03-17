@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MickitTicketApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MickitTicket - Book Event Tickets</title>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="app.js"></script>
+</head>
+<body ng-controller="MainController as mainCtrl">
+    <!-- Header Section -->
+    <header class="header">
+        <h1 class="logo" ng-click="mainCtrl.changeView('home')">MickitTicket</h1>
+        <nav class="nav">
+            <ul>
+                <li ng-repeat="tab in mainCtrl.tabs" 
+                    ng-class="{active: mainCtrl.currentView === tab.id}"
+                    ng-click="mainCtrl.changeView(tab.id)">
+                    {{tab.title}}
+                </li>
+                <li ng-if="mainCtrl.loggedInUser" 
+                    ng-class="{active: mainCtrl.currentView === 'wishlist'}"
+                    ng-click="mainCtrl.changeView('wishlist')">
+                    Wishlist
+                </li>
+            </ul>
+        </nav>
+        <div class="user-section">
+            <span ng-if="mainCtrl.loggedInUser">Welcome, {{mainCtrl.loggedInUser}}</span>
+            <button class="auth-button" ng-if="!mainCtrl.loggedInUser" ng-click="mainCtrl.openAuthModal()">Login / Sign Up</button>
+            <button class="auth-button logout" ng-if="mainCtrl.loggedInUser" ng-click="mainCtrl.logout()">Logout</button>
+        </div>
+    </header>
+
+    <!-- Main Content Sections -->
+    <main>
+        <!-- Home Section -->
+        <section ng-show="mainCtrl.currentView === 'home'" class="section home-section">
+            <div class="hero">
+                <h2>Your Gateway to Unforgettable Experiences</h2>
+                <p>Discover and book tickets for amazing events in your city - concerts, sports, theater, and more!</p>
+                <button class="cta-button" ng-click="mainCtrl.changeView('events')">Go to Events</button>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section ng-show="mainCtrl.currentView === 'events'" class="section events-section">
+            <div class="events-controls">
+                <!-- Search Bar -->
+                <input type="text" placeholder="Search events..." ng-model="mainCtrl.searchQuery">
+                
+                <!-- Category Filter -->
+                <select ng-model="mainCtrl.selectedCategory">
+                    <option value="">All Categories</option>
+                    <option ng-repeat="category in mainCtrl.categories" value="{{category}}">
+                        {{category}}
+                    </option>
+                </select>
+
+                <!-- Sorting Dropdown -->
+                <select ng-model="mainCtrl.sortOption">
+                    <option value="">Sort By</option>
+                    <option value="priceLow">Price: Low to High</option>
+                    <option value="priceHigh">Price: High to Low</option>
+                    <option value="dateSoon">Date: Soonest First</option>
+                    <option value="dateLate">Date: Latest First</option>
+                </select>                
+            </div>
+            
+            <div class="events-grid">
+                <div ng-repeat="event in mainCtrl.filteredEvents()" 
+                     class="event-card">
+                    <img ng-src="{{event.image}}" alt="{{event.name}}">
+                    <div class="event-details">
+                        <h3>{{event.name}}</h3>
+                        <p class="location">{{event.location}}</p>
+                        <p class="date">{{event.date}}</p>
+                        <p class="price">₹{{event.price}} per ticket</p>
+                        <button class="book-button" ng-click="mainCtrl.openSeatSelection(event)">Book Tickets</button>
+                        <button class="wishlist-button" 
+                                ng-click="mainCtrl.toggleWishlist(event)">
+                            {{ mainCtrl.isInWishlist(event) ? 'Remove from Wishlist' : 'Add to Wishlist' }}
+                        </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section ng-show="mainCtrl.currentView === 'categories'" class="section categories-section">
+            <h2>Event Categories</h2>
+            <table class="category-table">
+                <tr ng-repeat="category in mainCtrl.categories">
+                    <td class="category-name">{{category | uppercase}}</td>
+                    <td>
+                        <button class="view-button" 
+                                ng-click="mainCtrl.viewCategoryEvents(category)">
+                            View Events
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- About Section -->
+        <section ng-show="mainCtrl.currentView === 'about'" class="section about-section">
+            <div class="about-hero">
+                <h2>More Than Just Tickets</h2>
+                <p>Creating Memories Since 2023</p>
+            </div>
+        
+            <div class="about-content">
+                <div class="mission-statement">
+                    <h3><i class="fas fa-bullseye"></i> Our Mission</h3>
+                    <p>At MickitTicket, we're revolutionizing the way you experience live events. Our platform bridges the gap between passionate fans and unforgettable moments, offering seamless access to the best entertainment experiences.</p>
+                </div>
+        
+                <div class="values-grid">
+                    <div class="value-card">
+                        <i class="fas fa-rocket"></i>
+                        <h4>Instant Booking</h4>
+                        <p>Secure your spot in under 60 seconds with our optimized booking flow</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>100% Secure</h4>
+                        <p>Military-grade encryption protects every transaction</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-headset"></i>
+                        <h4>24/7 Support</h4>
+                        <p>Dedicated customer service team always ready to help</p>
+                    </div>
+                </div>
+        
+                <div class="story-section">
+                    <h3><i class="fas fa-history"></i> Our Story</h3>
+                    <p>Founded by event enthusiasts during a music festival crisis, MickitTicket was born from a simple idea: <em>"Nobody should miss out on great experiences because of ticket hassles"</em>.</p>
+                    
+                    <div class="milestones">
+                        <div class="milestone">
+                            <div class="number">1M+</div>
+                            <div class="label">Tickets Sold</div>
+                        </div>
+                        <div class="milestone">
+                            <div class="number">50+</div>
+                            <div class="label">Cities Covered</div>
+                        </div>
+                        <div class="milestone">
+                            <div class="number">98%</div>
+                            <div class="label">Customer Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-about">
+                    <p>Ready to create your own memories?</p>
+                    <button class="cta-button" ng-click="mainCtrl.changeView('events')">Explore Events Now</button>
+                </div>
+            </div>
+        </section>
+
+        <section ng-show="mainCtrl.currentView === 'wishlist'" class="section wishlist-section">
+            <h2>Your Wishlist</h2>
+            
+            <p ng-if="mainCtrl.wishlist.length === 0">Your wishlist is empty.</p>
+        
+            <div class="wishlist-grid">
+                <div ng-repeat="event in mainCtrl.wishlist" class="event-card">
+                    <img ng-src="{{event.image}}" alt="{{event.name}}">
+                    <div class="event-details">
+                        <h3>{{event.name}}</h3>
+                        <p class="location">{{event.location}}</p>
+                        <p class="date">{{event.date}}</p>
+                        <p class="price">₹{{event.price}} per ticket</p>
+                        <button class="book-button" ng-click="mainCtrl.openSeatSelection(event)">Book Now</button>
+                        <button class="wishlist-button remove" ng-click="mainCtrl.toggleWishlist(event)">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </section>        
+
+    </main>
+
+    <!-- Seat Selection Modal -->
+    <div class="modal-overlay" ng-if="mainCtrl.activeModal === 'seatSelection'">
+        <div class="modal">
+            <span class="close" ng-click="mainCtrl.closeModal()">&times;</span>
+            <h2>Select Seats for {{mainCtrl.selectedEvent.name}}</h2>
+
+            <!-- Seat Layout -->
+            <div class="seat-legend">
+                <span class="seat vip"></span> VIP (₹{{mainCtrl.selectedEvent.price * 1.5}}) 
+                <span class="seat regular"></span> Regular (₹{{mainCtrl.selectedEvent.price}})
+            </div>
+
+            <div class="seat-grid">
+                <div ng-repeat="seat in mainCtrl.seats" 
+                    class="seat" 
+                    ng-class="{
+                        'vip': seat.category === 'VIP',
+                        'regular': seat.category === 'Regular',
+                        'selected': seat.selected
+                    }"
+                    ng-click="mainCtrl.toggleSeat(seat)">
+                    {{seat.number}}
+                </div>
+            </div>
+
+            <!-- Total Section -->
+            <div class="total-section">
+                <p>Selected Seats: {{mainCtrl.getSelectedSeats().length}}</p>
+                <p>Total Price: ₹{{mainCtrl.getTotalPrice()}}</p>
+                <button class="proceed-button" ng-click="mainCtrl.openPayment()">Proceed to Payment</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-overlay" ng-if="mainCtrl.activeModal === 'payment'">
+        <div class="modal payment-modal">
+            <span class="close" ng-click="mainCtrl.closeModal()">&times;</span>
+            <h2>Complete Your Booking</h2>
+            
+            <div class="payment-content">
+                <label>
+                    <input type="radio" ng-model="mainCtrl.paymentMethod" value="UPI"> Pay via UPI
+                </label>
+                <label>
+                    <input type="radio" ng-model="mainCtrl.paymentMethod" value="Card"> Pay via Card
+                </label>
+                
+                <div ng-show="mainCtrl.paymentMethod === 'UPI'">
+                    <p>Scan the QR code to pay:</p>
+                    <img src="https://docs.lightburnsoftware.com/legacy/img/QRCode/ExampleCode.png" alt="UPI QR Code">
+                </div>
+                
+                <div ng-show="mainCtrl.paymentMethod === 'Card'">
+                    <p>Enter your card details:</p>
+                    <input type="text" placeholder="Card Number">
+                    <input type="text" placeholder="Expiry Date (MM/YY)">
+                    <input type="text" placeholder="CVV">
+                </div>
+                
+                <button class="proceed-btn" ng-click="mainCtrl.processPayment()">Proceed with Payment</button>
+            </div>
+        </div>
+    </div>    
+
+    <div class="modal-overlay" ng-if="mainCtrl.activeModal === 'confirmation'">
+        <div class="modal confirmation-modal">
+            <span class="close" ng-click="mainCtrl.closeModal()">&times;</span>
+            <h2>Booking Confirmed! 🎉</h2>
+            <p>Successfully booked {{mainCtrl.getSelectedSeats().length}} tickets for {{mainCtrl.selectedEvent.name}}.</p>
+            <p>An email confirmation has been sent to your registered address.</p>
+        </div>
+    </div>
+
+    <!-- Ticket Modal -->
+    <div class="modal-overlay" ng-if="mainCtrl.activeModal === 'ticket'">
+        <div class="modal ticket-modal">
+            <span class="close" ng-click="mainCtrl.closeModal()">&times;</span>
+            <h2>🎟 Your Ticket</h2>
+            
+            <p><strong>Event:</strong> {{mainCtrl.ticket.event}}</p>
+            <p><strong>Date:</strong> {{mainCtrl.ticket.date}}</p>
+            <p><strong>Location:</strong> {{mainCtrl.ticket.location}}</p>
+            <p><strong>Seats:</strong> {{mainCtrl.ticket.seats.join(', ')}}</p>
+            <p><strong>Total Price:</strong> ₹{{mainCtrl.ticket.price}}</p>
+
+            <!-- QR Code Section -->
+            <div id="qrCode" class="qr-code-container"></div>
+
+            <button class="download-button" onclick="downloadTicket()">Download Ticket</button>
+        </div>
+    </div>
+
+    <!-- QR Code Generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        function downloadTicket() {
+            html2canvas(document.querySelector('.ticket-modal')).then(canvas => {
+                let link = document.createElement('a');
+                link.href = canvas.toDataURL();
+                link.download = 'EventTicket.png';
+                link.click();
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+
+    <!-- Authentication Modal -->
+    <div class="modal-overlay" ng-if="mainCtrl.activeModal === 'auth'">
+        <div class="modal auth-modal">
+            <span class="close" ng-click="mainCtrl.closeModal()">&times;</span>
+            <h2>{{ mainCtrl.authMode === 'login' ? 'Login' : 'Sign Up' }}</h2>
+            <input type="text" placeholder="Name" ng-model="mainCtrl.authName" ng-if="mainCtrl.authMode === 'signup'">
+            <input type="email" placeholder="Email" ng-model="mainCtrl.authEmail">
+            <input type="password" placeholder="Password" ng-model="mainCtrl.authPassword">
+            <button class="auth-action" ng-click="mainCtrl.authenticate()">
+                {{ mainCtrl.authMode === 'login' ? 'Login' : 'Sign Up' }}
+            </button>
+            <p>
+                {{ mainCtrl.authMode === 'login' ? "Don't have an account?" : "Already have an account?" }}
+                <a href="#" ng-click="mainCtrl.toggleAuthMode()">
+                    {{ mainCtrl.authMode === 'login' ? 'Sign Up' : 'Login' }}
+                </a>
+            </p>
+        </div>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="social-links">
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p class="copyright">&copy; 2023 MickitTicket. All rights reserved. | A subsidiary of EventHub Inc.</p>
+    </footer>
+
+    </body>
+</html>
